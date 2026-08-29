@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Une petite question 💌</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #ff758c,
+                #ff7eb3
+            );
+            text-align: center;
+            overflow: hidden;
+        }
+        .card {
+            width: 90%;
+            max-width: 450px;
+            background: white;
+            padding: 35px 25px;
+            border-radius: 25px;
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 2;
+        }
+        .page {
+            display: none;
+        }
+        .active {
+            display: block;
+            animation: apparition 0.5s ease;
+        }
+        @keyframes apparition {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h1 {
+            color: #ff4f81;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 18px;
+            color: #444;
+        }
+        .emoji {
+            font-size: 55px;
+        }
+        button {
+            border: none;
+            padding: 14px 22px;
+            margin: 8px;
+            border-radius: 30px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            transform: scale(1.07);
+        }
+        .oui {
+            background: #ff4f81;
+            color: white;
+        }
+        .non {
+            background: #eeeeee;
+            color: #333;
+            position: relative;
+        }
+        .choix {
+            background: #ffedf3;
+            color: #ff4f81;
+            width: 80%;
+        }
+        .choix:hover {
+            background: #ff4f81;
+            color: white;
+        }
+        .resultat {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff4f81;
+            margin-top: 20px;
+        }
+        .petit-message {
+            font-size: 14px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <!-- ========================= -->
+    <!-- PAGE 1 -->
+    <!-- ========================= -->
+    <div id="page1" class="page active">
+        <div class="emoji">
+            💌
+        </div>
+        <h1 id="titre">
+            J'ai une question pour toi...
+        </h1>
+        <p id="question">
+            Tu veux sortir avec moi ? 👀❤️
+        </p>
+        <button
+            class="oui"
+            onclick="oui()">
+            Oui ❤️
+        </button>
+        <button
+            class="non"
+            id="boutonNon">
+            Non 😂
+        </button>
+        <p class="petit-message">
+            Fais ton choix 😏
+        </p>
+    </div>
+    <!-- ========================= -->
+    <!-- PAGE 2 -->
+    <!-- ========================= -->
+    <div id="page2" class="page">
+        <div class="emoji">
+            😍
+        </div>
+        <h1>
+            Je savais ! 😂❤️
+        </h1>
+        <p>
+            Maintenant, dis-moi...
+        </p>
+        <p>
+            <strong>
+                Tu es libre quand ? 🗓️
+            </strong>
+        </p>
+        <button
+            class="choix"
+            onclick="quand('Aujourd’hui')">
+            Aujourd’hui
+        </button>
+        <button
+            class="choix"
+            onclick="quand('Demain')">
+            Demain
+        </button>
+        <button
+            class="choix"
+            onclick="quand('Ce week-end')">
+            Ce week-end
+        </button>
+    </div>
+    <!-- ========================= -->
+    <!-- PAGE 3 -->
+    <!-- ========================= -->
+    <div id="page3" class="page">
+        <div class="emoji">
+            📍
+        </div>
+        <h1>
+            Et tu veux aller où ? 😎
+        </h1>
+        <button
+            class="choix"
+            onclick="lieu('faire une balade 🌳')">
+            🌳 Balade
+        </button>
+        <button
+            class="choix"
+            onclick="lieu('à la piscine 🏊')">
+            🏊 Piscine
+        </button>
+        <button
+            class="choix"
+            onclick="lieu('au restaurant 🍽️')">
+            🍽️ Restaurant
+        </button>
+    </div>
+    <!-- ========================= -->
+    <!-- PAGE 4 -->
+    <!-- ========================= -->
+    <div id="page4" class="page">
+        <div class="emoji">
+            🎉
+        </div>
+        <h1>
+            C'est validé ! ❤️
+        </h1>
+        <p id="message"></p>
+        <p class="resultat">
+            Rendez-vous confirmé 😎🔥
+        </p>
+    </div>
+</div>
+<script>
+    /* ==================================
+       ⭐ METS LE PRÉNOM ICI ⭐
+       ================================== */
+    const prenom = "Aïcha";
+    /* ==================================
+       VARIABLES
+       ================================== */
+    let disponibilite = "";
+    let destination = "";
+    /* ==================================
+       AFFICHER LE PRÉNOM
+       ================================== */
+    document.getElementById("titre").textContent =
+        prenom + ", j'ai une question pour toi... 💌";
+    document.getElementById("question").textContent =
+        prenom + ", tu veux sortir avec moi ? 👀❤️";
+    /* ==================================
+       CHANGER DE PAGE
+       ================================== */
+    function afficher(page) {
+        document
+            .querySelectorAll(".page")
+            .forEach(function(pageElement) {
+                pageElement.classList.remove("active");
+            });
+        document
+            .getElementById(page)
+            .classList.add("active");
+    }
+    /* ==================================
+       BOUTON OUI
+       ================================== */
+    function oui() {
+        afficher("page2");
+    }
+    /* ==================================
+       BOUTON NON QUI FUIT 😂
+       ================================== */
+    const boutonNon =
+        document.getElementById("boutonNon");
+    boutonNon.addEventListener(
+        "mouseenter",
+        fuir
+    );
+    boutonNon.addEventListener(
+        "touchstart",
+        fuir
+    );
+    function fuir() {
+        const largeur =
+            window.innerWidth;
+        const hauteur =
+            window.innerHeight;
+        const largeurBouton =
+            boutonNon.offsetWidth;
+        const hauteurBouton =
+            boutonNon.offsetHeight;
+        const x =
+            Math.random() *
+            (largeur - largeurBouton - 20);
+        const y =
+            Math.random() *
+            (hauteur - hauteurBouton - 20);
+        boutonNon.style.position = "fixed";
+        boutonNon.style.left =
+            Math.max(10, x) + "px";
+        boutonNon.style.top =
+            Math.max(10, y) + "px";
+    }
+    /* ==================================
+       CHOIX DE LA DATE
+       ================================== */
+    function quand(choix) {
+        disponibilite = choix;
+        afficher("page3");
+    }
+    /* ==================================
+       CHOIX DU LIEU
+       ================================== */
+    function lieu(choix) {
+        destination = choix;
+        afficher("page4");
+        document
+            .getElementById("message")
+            .innerHTML =
+            prenom +
+            ", donc on se voit <strong>" +
+            disponibilite +
+            "</strong> pour " +
+            "<strong>" +
+            destination +
+            "</strong> 😏❤️";
+    }
+</script>
+</body>
+</html>
